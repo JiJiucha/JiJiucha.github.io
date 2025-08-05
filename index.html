@@ -1,1 +1,138 @@
-index.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极验验证码JSON接口</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <style>
+        /* 新增样式 */
+        #json-input, #json-output {
+            width: 400px;
+            height: 100px;
+            padding: 10px;
+            font-family: monospace;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .json-container {
+            margin-bottom: 20px;
+        }
+        label.json-label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="json-container">
+        <label class="json-label">1. 输入包含gt和challenge的JSON:</label>
+        <textarea id="json-input" placeholder='{"gt": "YOUR_GT_VALUE", "challenge": "YOUR_CHALLENGE_VALUE"}'></textarea>
+    </div>
+
+    <div id="btn-gen" class="btn">2. 生成验证码</div>
+    <br><br>
+
+    <div>
+        <label>3. 验证：</label>
+        <div id="captcha">
+            <div id="text">
+                请先生成验证码
+            </div>
+            <div id="wait" class="show">
+                <div class="loading">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div id="btn-result" class="btn">4. 获取验证结果</div>
+    <br><br>
+
+    <div class="json-container">
+        <label class="json-label">5. 验证结果JSON:</label>
+        <textarea id="json-output" readonly placeholder='{"validate": "RESULT_VALUE", "seccode": "RESULT_VALUE"}'></textarea>
+    </div>
+
+    <script src="jquery.js"></script>
+    <script src="gt.js"></script>
+
+    <script>
+        alert('本页面改自开源项目 https://github.com/kuresaru/geetest-validator');
+        var captchaObj = null;
+        var handler = function (captcha) {
+            captchaObj = captcha;
+            captcha.appendTo('#captcha');
+            captcha.onReady(function () {
+                $("#wait").hide();
+            });
+            
+            $('#btn-result').click(function () {
+                if (!captchaObj) {
+                    return alert('请先生成验证码');
+                }
+                
+                var result = captchaObj.getValidate();
+                if (!result) {
+                    return alert('请完成验证');
+                }
+                
+                // 创建结果JSON对象
+                var resultJson = {
+                    validate: result.geetest_validate,
+                    seccode: result.geetest_seccode
+                };
+                
+                // 将结果转换为JSON字符串并显示
+                $('#json-output').val(JSON.stringify(resultJson));
+            });
+        };
+
+        $('#btn-gen').click(function () {
+            try {
+                // 解析JSON输入
+                var inputJson = $('#json-input').val();
+                if (!inputJson) {
+                    return alert('请输入JSON数据');
+                }
+                
+                var config = JSON.parse(inputJson);
+                
+                // 验证必要字段
+                if (!config.gt || !config.challenge) {
+                    return alert('JSON中必须包含gt和challenge字段');
+                }
+                
+                $('#text').hide();
+                $('#wait').show();
+                $('#json-output').val(''); // 清空之前的结果
+
+                // 初始化验证码
+                initGeetest({
+                    gt: config.gt,
+                    challenge: config.challenge,
+                    offline: false,
+                    new_captcha: true,
+                    product: "popup",
+                    width: "300px",
+                    https: true
+                }, handler);
+                
+            } catch (e) {
+                alert('JSON解析错误: ' + e.message);
+            }
+        });
+    </script>
+</body>
+
+</html>
