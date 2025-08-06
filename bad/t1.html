@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>绝对正经的恶搞网站</title>
+    <title>绝对正经的恶搞网站 - 优化版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Rubik+Beastly&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -17,11 +18,15 @@
                             green: '#39FF14',
                             blue: '#00FFFF',
                             yellow: '#FFFF00',
-                            purple: '#9370DB'
+                            purple: '#9370DB',
+                            orange: '#FFA500',
+                            red: '#FF0000'
                         }
                     },
                     fontFamily: {
-                        silly: ['Comic Sans MS', 'cursive']
+                        silly: ['Comic Sans MS', 'cursive'],
+                        crazy: ['Rubik Beastly', 'cursive'],
+                        handwriting: ['Indie Flower', 'cursive']
                     }
                 }
             }
@@ -33,20 +38,44 @@
             .text-shadow {
                 text-shadow: 3px 3px 0px black;
             }
+            .text-shadow-lg {
+                text-shadow: 5px 5px 0px black;
+            }
             .rotate-random {
                 transform: rotate(var(--rotation, 0deg));
             }
             .wiggle {
                 animation: wiggle 0.5s infinite alternate;
             }
+            .wiggle-slow {
+                animation: wiggle 2s infinite alternate;
+            }
             .float {
                 animation: float 3s ease-in-out infinite;
+            }
+            .float-fast {
+                animation: float 1.5s ease-in-out infinite;
             }
             .spin-slow {
                 animation: spin 10s linear infinite;
             }
+            .spin-medium {
+                animation: spin 5s linear infinite;
+            }
+            .spin-fast {
+                animation: spin 2s linear infinite;
+            }
             .glow {
                 box-shadow: 0 0 15px currentColor;
+            }
+            .glow-intense {
+                box-shadow: 0 0 25px currentColor;
+            }
+            .bounce {
+                animation: bounce 1s infinite alternate;
+            }
+            .crazy-mode {
+                animation: crazyMode 0.1s infinite;
             }
         }
         
@@ -60,39 +89,135 @@
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0px); }
         }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-20px); }
+        }
+        
+        @keyframes crazyMode {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        .chaos-cursor {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23FF0000'/%3E%3C/svg%3E"), auto;
+        }
+        
+        .distort {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .distort::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, transparent 20%, black 150%);
+            mix-blend-mode: multiply;
+            animation: distort 4s infinite alternate;
+        }
+        
+        @keyframes distort {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+        
+        .crazy-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .crazy-button:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .crazy-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(30deg) translateX(-100%); }
+            100% { transform: rotate(30deg) translateX(100%); }
+        }
     </style>
 </head>
-<body class="min-h-screen overflow-x-hidden font-silly transition-all duration-300" id="chaos-body">
+<body class="min-h-screen overflow-x-hidden font-silly transition-all duration-300 chaos-cursor" id="chaos-body">
     <!-- 随机背景颜色切换器 -->
     <script>
         function randomColor() {
-            const colors = ['chaos-pink', 'chaos-green', 'chaos-blue', 'chaos-yellow', 'chaos-purple'];
+            const colors = ['chaos-pink', 'chaos-green', 'chaos-blue', 'chaos-yellow', 'chaos-purple', 'chaos-orange', 'chaos-red'];
             return colors[Math.floor(Math.random() * colors.length)];
         }
         
+        function randomRotation() {
+            return Math.random() * 10 - 5; // -5deg to 5deg
+        }
+        
+        function randomScale() {
+            return 0.9 + Math.random() * 0.2; // 0.9 to 1.1
+        }
+        
         setInterval(() => {
-            document.body.className = `min-h-screen overflow-x-hidden font-silly transition-all duration-300 bg-${randomColor()}/20`;
-        }, 3000);
+            document.body.className = `min-h-screen overflow-x-hidden font-silly transition-all duration-300 chaos-cursor bg-${randomColor()}/20`;
+            
+            // 随机旋转页面元素
+            document.querySelectorAll('.random-rotate').forEach(el => {
+                const rotation = randomRotation();
+                el.style.transform = `rotate(${rotation}deg)`;
+            });
+            
+            // 随机缩放页面元素
+            document.querySelectorAll('.random-scale').forEach(el => {
+                const scale = randomScale();
+                el.style.transform = `scale(${scale})`;
+            });
+            
+            // 随机改变字体
+            const fonts = ['silly', 'crazy', 'handwriting'];
+            const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+            document.body.style.fontFamily = `var(--font-${randomFont})`;
+            
+        }, 2000);
     </script>
 
     <!-- 顶部导航栏 -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b-4 border-black rotate-1">
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b-4 border-black rotate-random random-rotate" style="--rotation: 1deg;">
         <div class="container mx-auto py-4 px-6 flex justify-between items-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-shadow text-chaos-purple wiggle">
-                正经网<span class="text-chaos-green">站</span>
+            <h1 class="text-4xl md:text-5xl font-bold text-shadow-lg text-chaos-purple wiggle">
+                正经网<span class="text-chaos-green">站</span> <span class="text-sm text-chaos-red">PRO MAX</span>
             </h1>
             
             <nav class="hidden md:block">
                 <ul class="flex space-x-6">
-                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">首页</a></li>
-                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">关于我们</a></li>
-                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">服务</a></li>
-                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">联系</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform crazy-button px-3 py-1 rounded-full">首页</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform crazy-button px-3 py-1 rounded-full">关于我们</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform crazy-button px-3 py-1 rounded-full">服务</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform crazy-button px-3 py-1 rounded-full">联系</a></li>
+                    <li><button onclick="enableCrazyMode()" class="text-xl bg-chaos-red text-white px-3 py-1 rounded-full glow-intense">疯狂模式</button></li>
                 </ul>
             </nav>
             
-            <button class="md:hidden text-3xl" onclick="alert('菜单按钮被你按坏了！')">
-                <<i class="fa fa-bars"></</i>
+            <button class="md:hidden text-3xl bg-chaos-blue text-white p-2 rounded-full glow" onclick="alert('菜单按钮被你按坏了！需要支付$99.99修理费！')">
+                <i class="fa fa-bars"></i>
             </button>
         </div>
     </header>
@@ -103,24 +228,30 @@
         <section class="mb-20 relative">
             <div class="absolute -top-10 -left-10 w-40 h-40 bg-chaos-yellow/50 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-chaos-purple/50 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/4 left-1/4 w-60 h-60 bg-chaos-red/30 rounded-full blur-3xl"></div>
             
             <div class="relative text-center">
-                <h2 class="text-5xl md:text-7xl font-bold mb-6 text-shadow text-chaos-blue float">
-                    欢迎来到<span class="text-chaos-pink">混乱</span>世界
+                <h2 class="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg text-chaos-blue float">
+                    欢迎来到<span class="text-chaos-pink wiggle-slow">混乱</span>世界
                 </h2>
-                <p class="text-xl md:text-2xl max-w-2xl mx-auto mb-10 rotate-1">
+                <p class="text-xl md:text-2xl max-w-2xl mx-auto mb-10 rotate-random" style="--rotation: 1deg;">
                     这里什么都有可能发生，包括但不限于：随机颜色变化、按钮不听话、文字乱跑...
                 </p>
                 
                 <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <button onclick="this.innerHTML = '你点我干嘛？'; this.classList.add('bg-chaos-pink', 'text-white')" 
-                            class="px-8 py-4 text-xl font-bold bg-chaos-green hover:bg-chaos-blue transition-colors duration-300 rounded-full glow">
+                    <button onclick="dodgeButton(this)" 
+                            class="px-8 py-4 text-xl font-bold bg-chaos-green hover:bg-chaos-blue transition-colors duration-300 rounded-full glow-intense crazy-button">
                         点我！快点我！
                     </button>
                     
                     <button onclick="window.location.href = 'https://www.bing.com/search?q=为什么+天空是蓝色的'" 
-                            class="px-8 py-4 text-xl font-bold bg-chaos-blue hover:bg-chaos-green transition-colors duration-300 rounded-full glow">
+                            class="px-8 py-4 text-xl font-bold bg-chaos-blue hover:bg-chaos-green transition-colors duration-300 rounded-full glow-intense crazy-button">
                         不要点我！
+                    </button>
+                    
+                    <button onclick="surpriseMe()" 
+                            class="px-8 py-4 text-xl font-bold bg-chaos-red text-white hover:bg-chaos-yellow hover:text-black transition-colors duration-300 rounded-full glow-intense crazy-button">
+                        给我惊喜！
                     </button>
                 </div>
             </div>
@@ -128,46 +259,46 @@
         
         <!-- 特色内容 -->
         <section class="mb-20">
-            <h3 class="text-4xl font-bold mb-12 text-center text-chaos-purple transform hover:rotate-3 transition-transform">
+            <h3 class="text-4xl font-bold mb-12 text-center text-chaos-purple transform hover:rotate-3 transition-transform bounce">
                 我们的<span class="text-chaos-yellow">特色服务</span>
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- 特色卡片 1 -->
-                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-2 border-black rotate-[-2deg]">
+                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-4 border-dashed border-chaos-green rotate-random random-rotate" style="--rotation: -2deg;">
                     <div class="text-6xl mb-4 text-chaos-green spin-slow">
-                        <<i class="fa fa-coffee"></</i>
+                        <i class="fa fa-coffee"></i>
                     </div>
                     <h4 class="text-2xl font-bold mb-3 text-chaos-blue">咖啡冷却服务</h4>
                     <p>我们专业帮您把太热的咖啡吹凉，只需要998元/杯，绝对比您自己吹更专业！</p>
                     <button onclick="alert('您的咖啡已经凉透了，现在需要加热服务吗？仅需1998元')" 
-                            class="mt-4 px-4 py-2 bg-chaos-pink text-white rounded-full">
+                            class="mt-4 px-4 py-2 bg-chaos-pink text-white rounded-full glow crazy-button">
                         立即订购
                     </button>
                 </div>
                 
                 <!-- 特色卡片 2 -->
-                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-2 border-black rotate-[1deg]">
-                    <div class="text-6xl mb-4 text-chaos-blue spin-slow">
-                        <<i class="fa fa-clock-o"></</i>
+                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-4 border-dotted border-chaos-blue rotate-random random-rotate" style="--rotation: 1deg;">
+                    <div class="text-6xl mb-4 text-chaos-blue spin-medium">
+                        <i class="fa fa-clock-o"></i>
                     </div>
                     <h4 class="text-2xl font-bold mb-3 text-chaos-green">等待服务</h4>
                     <p>您需要有人陪您等待吗？我们的专业等待师可以陪您等公交、等电梯，按分钟计费！</p>
                     <button onclick="alert('您已成功购买10分钟等待服务，现在请开始等待...')" 
-                            class="mt-4 px-4 py-2 bg-chaos-purple text-white rounded-full">
+                            class="mt-4 px-4 py-2 bg-chaos-purple text-white rounded-full glow crazy-button">
                         开始等待
                     </button>
                 </div>
                 
                 <!-- 特色卡片 3 -->
-                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-2 border-black rotate-[-1deg]">
-                    <div class="text-6xl mb-4 text-chaos-pink spin-slow">
-                        <<i class="fa fa-lightbulb-o"></</i>
+                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-4 border-double border-chaos-pink rotate-random random-rotate" style="--rotation: -1deg;">
+                    <div class="text-6xl mb-4 text-chaos-pink spin-fast">
+                        <i class="fa fa-lightbulb-o"></i>
                     </div>
                     <h4 class="text-2xl font-bold mb-3 text-chaos-yellow">思考服务</h4>
                     <p>想不出问题答案？我们帮您思考！专业思考团队为您提供各种无用问题的思考服务！</p>
                     <button onclick="alert('我们已经思考了3秒钟，认为这个问题不值得思考')" 
-                            class="mt-4 px-4 py-2 bg-chaos-blue text-white rounded-full">
+                            class="mt-4 px-4 py-2 bg-chaos-blue text-white rounded-full glow crazy-button">
                         让我们思考
                     </button>
                 </div>
@@ -175,19 +306,20 @@
         </section>
         
         <!-- 搞笑表单区域 -->
-        <section class="mb-20 bg-white/60 p-8 rounded-3xl border-4 border-black rotate-[0.5deg]">
-            <h3 class="text-4xl font-bold mb-8 text-center text-chaos-blue">
+        <section class="mb-20 bg-white/60 p-8 rounded-3xl border-4 border-black rotate-random random-rotate" style="--rotation: 0.5deg;">
+            <h3 class="text-4xl font-bold mb-8 text-center text-chaos-blue bounce">
                 免费<span class="text-chaos-pink">智商测试</span>
             </h3>
             
-            <form onsubmit="alert('恭喜您！您的智商超过了本测试的测量范围！'); return false" class="max-w-2xl mx-auto">
+            <form onsubmit="showTestResult(); return false" class="max-w-2xl mx-auto">
                 <div class="mb-6">
                     <label class="block text-xl mb-2" for="question1">1. 为什么水会湿？</label>
-                    <select id="question1" class="w-full p-3 border-2 border-chaos-green rounded-lg">
+                    <select id="question1" class="w-full p-3 border-2 border-chaos-green rounded-lg crazy-button" onfocus="moveElement(this)">
                         <option>因为它不想干</option>
                         <option>因为它喝了太多水</option>
                         <option>因为水是液体</option>
                         <option>因为我碰了它</option>
+                        <option>因为水是湿的（循环论证）</option>
                     </select>
                 </div>
                 
@@ -198,53 +330,82 @@
                         <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 猫是狗的一种</label>
                         <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 这个选项是错的</label>
                         <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 我选这个</label>
+                        <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 以上全错</label>
                     </div>
                 </div>
                 
                 <div class="mb-6">
                     <label class="block text-xl mb-2" for="question3">3. 输入您的答案：</label>
                     <input type="text" id="question3" placeholder="随便输入点什么" 
-                           class="w-full p-3 border-2 border-chaos-purple rounded-lg">
+                           class="w-full p-3 border-2 border-chaos-purple rounded-lg crazy-button" onfocus="moveElement(this)">
                 </div>
                 
-                <button type="submit" class="w-full py-4 text-2xl font-bold bg-chaos-yellow hover:bg-chaos-green transition-colors rounded-full glow">
+                <button type="submit" class="w-full py-4 text-2xl font-bold bg-chaos-yellow hover:bg-chaos-green transition-colors rounded-full glow-intense crazy-button">
                     提交测试
                 </button>
             </form>
         </section>
         
         <!-- 随机移动的元素 -->
-        <div class="fixed top-[30%] right-[5%] w-20 h-20 bg-chaos-pink rounded-full flex items-center justify-center text-white text-3xl cursor-pointer"
-             onmouseover="this.style.left = `${Math.random() * 80 + 10}%`; this.style.top = `${Math.random() * 80 + 10}%`"
+        <div class="fixed top-[30%] right-[5%] w-20 h-20 bg-chaos-pink rounded-full flex items-center justify-center text-white text-3xl cursor-pointer shadow-lg"
+             onmouseover="dodgeElement(this)"
              style="position: fixed;">
-            <<i class="fa fa-bomb"></</i>
+            <i class="fa fa-bomb spin-medium"></i>
+        </div>
+        
+        <div class="fixed top-[10%] left-[10%] w-16 h-16 bg-chaos-blue rounded-full flex items-center justify-center text-white text-2xl cursor-pointer shadow-lg"
+             onmouseover="dodgeElement(this)"
+             style="position: fixed;">
+            <i class="fa fa-birthday-cake bounce"></i>
+        </div>
+        
+        <div class="fixed bottom-[20%] right-[20%] w-14 h-14 bg-chaos-yellow rounded-full flex items-center justify-center text-black text-xl cursor-pointer shadow-lg"
+             onmouseover="dodgeElement(this)"
+             style="position: fixed;">
+            <i class="fa fa-music spin-fast"></i>
+        </div>
+        
+        <div class="fixed bottom-[10%] left-[15%] w-18 h-18 bg-chaos-green rounded-full flex items-center justify-center text-white text-2xl cursor-pointer shadow-lg"
+             onmouseover="dodgeElement(this)"
+             style="position: fixed;">
+            <i class="fa fa-gift float-fast"></i>
         </div>
     </main>
 
     <!-- 页脚 -->
-    <footer class="bg-black text-white py-10">
-        <div class="container mx-auto px-6">
+    <footer class="bg-black text-white py-10 relative">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+            <div class="absolute top-10 left-1/4 w-40 h-40 bg-chaos-purple/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-1/4 w-40 h-40 bg-chaos-red/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
-                    <h2 class="text-3xl font-bold text-chaos-green">正经网站</h2>
+                    <h2 class="text-3xl font-bold text-chaos-green wiggle">正经网站</h2>
                     <p>© 2023 版权所有 - 禁止严肃</p>
                 </div>
                 
                 <div class="flex space-x-6 text-2xl">
-                    <a href="#" class="text-chaos-pink hover:text-chaos-blue transition-colors" onclick="alert('我们没有微信')"><<i class="fa fa-weixin"></</i></a>
-                    <a href="#" class="text-chaos-blue hover:text-chaos-green transition-colors" onclick="alert('我们没有微博')"><<i class="fa fa-weibo"></</i></a>
-                    <a href="#" class="text-chaos-green hover:text-chaos-yellow transition-colors" onclick="alert('我们没有抖音')"><<i class="fa fa-music"></</i></a>
+                    <a href="#" class="text-chaos-pink hover:text-chaos-blue transition-colors" onclick="alert('我们没有微信')"><i class="fa fa-weixin"></i></a>
+                    <a href="#" class="text-chaos-blue hover:text-chaos-green transition-colors" onclick="alert('我们没有微博')"><i class="fa fa-weibo"></i></a>
+                    <a href="#" class="text-chaos-green hover:text-chaos-yellow transition-colors" onclick="alert('我们没有抖音')"><i class="fa fa-music"></i></a>
+                    <a href="#" class="text-chaos-yellow hover:text-chaos-pink transition-colors" onclick="alert('我们没有Instagram')"><i class="fa fa-instagram"></i></a>
                 </div>
             </div>
             
             <div class="mt-8 text-center text-sm">
-                <p>本网站纯属恶搞，如有雷同，那也太巧了</p>
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-4 text-chaos-yellow hover:underline">
+                <p class="mb-2">本网站纯属恶搞，如有雷同，那也太巧了</p>
+                <p class="mb-4">警告：长时间浏览可能导致头晕、眼花和不受控制的傻笑</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-4 text-chaos-yellow hover:underline glow">
                     回到顶部（如果还能回去的话）
                 </button>
             </div>
         </div>
     </footer>
+
+    <!-- 消息通知容器 -->
+    <div id="message-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-2"></div>
 
     <!-- 随机弹出的消息 -->
     <script>
@@ -254,19 +415,246 @@
             "警告：您笑得太大声了",
             "提示：这个网站很蠢",
             "恭喜：您已浪费1分钟",
-            "注意：您的鼠标有点饿了"
+            "注意：您的鼠标有点饿了",
+            "系统检测到您正在傻笑",
+            "重要通知：其实没有通知",
+            "您的智商刚刚+1（然后又-2）",
+            "警告：页面元素可能随时逃跑",
+            "小贴士：不要相信这里的任何内容",
+            "注意：您的光标已被跟踪",
+            "提示：本网站对正经人士有害"
         ];
         
         function showRandomMessage() {
-            const randomTime = Math.random() * 30000 + 10000; // 10-40秒之间
+            const randomTime = Math.random() * 10000 + 5000; // 5-15秒之间
             setTimeout(() => {
-                alert(messages[Math.floor(Math.random() * messages.length)]);
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                createFloatingMessage(message);
                 showRandomMessage();
             }, randomTime);
         }
         
+        function createFloatingMessage(text) {
+            const container = document.getElementById('message-container');
+            const message = document.createElement('div');
+            
+            // 随机位置和颜色
+            const colors = ['chaos-pink', 'chaos-green', 'chaos-blue', 'chaos-yellow', 'chaos-purple', 'chaos-orange', 'chaos-red'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            message.className = `px-4 py-3 rounded-lg text-white font-bold text-shadow bg-${color} border-2 border-black transform rotate-random transition-all duration-300`;
+            message.style.setProperty('--rotation', `${Math.random() * 20 - 10}deg`);
+            message.textContent = text;
+            
+            container.appendChild(message);
+            
+            // 3秒后移除消息
+            setTimeout(() => {
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.remove();
+                }, 300);
+            }, 3000);
+        }
+        
         // 页面加载后开始
         window.onload = showRandomMessage;
+        
+        // 按钮躲避功能
+        function dodgeButton(button) {
+            button.innerHTML = '哈哈抓不到我！';
+            button.classList.remove('bg-chaos-green');
+            button.classList.add('bg-chaos-pink', 'text-white');
+            
+            // 随机移动按钮位置
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            button.style.position = 'absolute';
+            button.style.left = `${x}%`;
+            button.style.top = `${y}%`;
+            
+            // 3秒后恢复
+            setTimeout(() => {
+                button.style.position = '';
+                button.style.left = '';
+                button.style.top = '';
+                button.innerHTML = '点我！快点我！';
+                button.classList.remove('bg-chaos-pink', 'text-white');
+                button.classList.add('bg-chaos-green');
+            }, 3000);
+        }
+        
+        // 移动元素功能
+        function moveElement(element) {
+            const rotation = Math.random() * 20 - 10; // -10deg to 10deg
+            element.style.transform = `rotate(${rotation}deg) translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px)`;
+            
+            // 恢复
+            setTimeout(() => {
+                element.style.transform = '';
+            }, 1000);
+        }
+        
+        // 元素躲避功能
+        function dodgeElement(element) {
+            const x = Math.random() * 80 + 10;
+            const y = Math.random() * 80 + 10;
+            element.style.left = `${x}%`;
+            element.style.top = `${y}%`;
+        }
+        
+        // 惊喜按钮功能
+        function surpriseMe() {
+            // 添加烟花效果
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    createFirework();
+                }, i * 100);
+            }
+            
+            // 播放音效
+            playSound();
+            
+            // 显示惊喜消息
+            createFloatingMessage('惊喜！但什么也没发生！');
+        }
+        
+        function createFirework() {
+            const container = document.body;
+            const firework = document.createElement('div');
+            
+            // 随机位置
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            
+            // 随机颜色
+            const colors = ['chaos-pink', 'chaos-green', 'chaos-blue', 'chaos-yellow', 'chaos-purple', 'chaos-orange', 'chaos-red'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            firework.className = `absolute w-4 h-4 rounded-full bg-${color} glow`;
+            firework.style.left = `${x}px`;
+            firework.style.top = `${y}px`;
+            firework.style.zIndex = '40';
+            
+            container.appendChild(firework);
+            
+            // 动画效果
+            setTimeout(() => {
+                firework.style.transform = 'scale(3)';
+                firework.style.opacity = '0';
+                setTimeout(() => {
+                    firework.remove();
+                }, 500);
+            }, 100);
+        }
+        
+        function playSound() {
+            // 创建音频上下文
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // 随机频率
+            oscillator.frequency.value = 200 + Math.random() * 2000;
+            
+            // 随机音效类型
+            oscillator.type = ['sine', 'square', 'sawtooth', 'triangle'][Math.floor(Math.random() * 4)];
+            
+            // 音量变化
+            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+        
+        // 测试结果显示
+        function showTestResult() {
+            const results = [
+                "您的智商：250！天才级别！",
+                "测试结果：您的智商比树懒高一点",
+                "恭喜！您的智商超过了地球上70%的蚂蚁",
+                "结果分析：您的智商处于量子态（既高又低）",
+                "测试完成：智商水平未知（系统无法测量如此高的数值）",
+                "结果：您的智商与一块砖头相当",
+                "恭喜！您的智商测试打破了本系统的最低记录！"
+            ];
+            
+            const result = results[Math.floor(Math.random() * results.length)];
+            createFloatingMessage(result);
+        }
+        
+        // 疯狂模式
+        function enableCrazyMode() {
+            document.body.classList.add('crazy-mode');
+            createFloatingMessage("疯狂模式已启动！");
+            
+            // 添加更多动画元素
+            for (let i = 0; i < 10; i++) {
+                createCrazyElement();
+            }
+            
+            // 5秒后恢复
+            setTimeout(() => {
+                document.body.classList.remove('crazy-mode');
+                createFloatingMessage("疯狂模式已关闭");
+            }, 5000);
+        }
+        
+        function createCrazyElement() {
+            const container = document.body;
+            const element = document.createElement('div');
+            
+            // 随机位置
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            
+            // 随机大小
+            const size = 20 + Math.random() * 80;
+            
+            // 随机形状
+            const shapes = ['circle', 'square', 'triangle'];
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            
+            // 随机颜色
+            const colors = ['chaos-pink', 'chaos-green', 'chaos-blue', 'chaos-yellow', 'chaos-purple', 'chaos-orange', 'chaos-red'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            element.className = `absolute bg-${color} glow`;
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            element.style.width = `${size}px`;
+            element.style.height = `${size}px`;
+            element.style.zIndex = '30';
+            
+            if (shape === 'circle') {
+                element.style.borderRadius = '50%';
+            } else if (shape === 'triangle') {
+                element.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+                element.style.backgroundColor = 'transparent';
+                element.style.borderLeft = `${size/2}px solid transparent`;
+                element.style.borderRight = `${size/2}px solid transparent`;
+                element.style.borderBottom = `${size}px solid var(--tw-${color})`;
+            }
+            
+            // 随机动画
+            const animations = ['float', 'spin-slow', 'spin-medium', 'spin-fast', 'wiggle', 'bounce'];
+            const animation = animations[Math.floor(Math.random() * animations.length)];
+            element.classList.add(animation);
+            
+            container.appendChild(element);
+            
+            // 5秒后移除
+            setTimeout(() => {
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    element.remove();
+                }, 1000);
+            }, 5000);
+        }
     </script>
 </body>
 </html>
