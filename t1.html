@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绝对正经的恶搞网站</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        chaos: {
+                            pink: '#FF69B4',
+                            green: '#39FF14',
+                            blue: '#00FFFF',
+                            yellow: '#FFFF00',
+                            purple: '#9370DB'
+                        }
+                    },
+                    fontFamily: {
+                        silly: ['Comic Sans MS', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 3px 3px 0px black;
+            }
+            .rotate-random {
+                transform: rotate(var(--rotation, 0deg));
+            }
+            .wiggle {
+                animation: wiggle 0.5s infinite alternate;
+            }
+            .float {
+                animation: float 3s ease-in-out infinite;
+            }
+            .spin-slow {
+                animation: spin 10s linear infinite;
+            }
+            .glow {
+                box-shadow: 0 0 15px currentColor;
+            }
+        }
+        
+        @keyframes wiggle {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen overflow-x-hidden font-silly transition-all duration-300" id="chaos-body">
+    <!-- 随机背景颜色切换器 -->
+    <script>
+        function randomColor() {
+            const colors = ['chaos-pink', 'chaos-green', 'chaos-blue', 'chaos-yellow', 'chaos-purple'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        setInterval(() => {
+            document.body.className = `min-h-screen overflow-x-hidden font-silly transition-all duration-300 bg-${randomColor()}/20`;
+        }, 3000);
+    </script>
+
+    <!-- 顶部导航栏 -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b-4 border-black rotate-1">
+        <div class="container mx-auto py-4 px-6 flex justify-between items-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-shadow text-chaos-purple wiggle">
+                正经网<span class="text-chaos-green">站</span>
+            </h1>
+            
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">首页</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">关于我们</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">服务</a></li>
+                    <li><a href="#" class="text-xl hover:text-chaos-blue transform hover:scale-125 transition-transform">联系</a></li>
+                </ul>
+            </nav>
+            
+            <button class="md:hidden text-3xl" onclick="alert('菜单按钮被你按坏了！')">
+                <<i class="fa fa-bars"></</i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-6 py-12">
+        <!-- 英雄区域 -->
+        <section class="mb-20 relative">
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-chaos-yellow/50 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-chaos-purple/50 rounded-full blur-3xl"></div>
+            
+            <div class="relative text-center">
+                <h2 class="text-5xl md:text-7xl font-bold mb-6 text-shadow text-chaos-blue float">
+                    欢迎来到<span class="text-chaos-pink">混乱</span>世界
+                </h2>
+                <p class="text-xl md:text-2xl max-w-2xl mx-auto mb-10 rotate-1">
+                    这里什么都有可能发生，包括但不限于：随机颜色变化、按钮不听话、文字乱跑...
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <button onclick="this.innerHTML = '你点我干嘛？'; this.classList.add('bg-chaos-pink', 'text-white')" 
+                            class="px-8 py-4 text-xl font-bold bg-chaos-green hover:bg-chaos-blue transition-colors duration-300 rounded-full glow">
+                        点我！快点我！
+                    </button>
+                    
+                    <button onclick="window.location.href = 'https://www.bing.com/search?q=为什么+天空是蓝色的'" 
+                            class="px-8 py-4 text-xl font-bold bg-chaos-blue hover:bg-chaos-green transition-colors duration-300 rounded-full glow">
+                        不要点我！
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 特色内容 -->
+        <section class="mb-20">
+            <h3 class="text-4xl font-bold mb-12 text-center text-chaos-purple transform hover:rotate-3 transition-transform">
+                我们的<span class="text-chaos-yellow">特色服务</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 特色卡片 1 -->
+                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-2 border-black rotate-[-2deg]">
+                    <div class="text-6xl mb-4 text-chaos-green spin-slow">
+                        <<i class="fa fa-coffee"></</i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-chaos-blue">咖啡冷却服务</h4>
+                    <p>我们专业帮您把太热的咖啡吹凉，只需要998元/杯，绝对比您自己吹更专业！</p>
+                    <button onclick="alert('您的咖啡已经凉透了，现在需要加热服务吗？仅需1998元')" 
+                            class="mt-4 px-4 py-2 bg-chaos-pink text-white rounded-full">
+                        立即订购
+                    </button>
+                </div>
+                
+                <!-- 特色卡片 2 -->
+                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-2 border-black rotate-[1deg]">
+                    <div class="text-6xl mb-4 text-chaos-blue spin-slow">
+                        <<i class="fa fa-clock-o"></</i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-chaos-green">等待服务</h4>
+                    <p>您需要有人陪您等待吗？我们的专业等待师可以陪您等公交、等电梯，按分钟计费！</p>
+                    <button onclick="alert('您已成功购买10分钟等待服务，现在请开始等待...')" 
+                            class="mt-4 px-4 py-2 bg-chaos-purple text-white rounded-full">
+                        开始等待
+                    </button>
+                </div>
+                
+                <!-- 特色卡片 3 -->
+                <div class="bg-white/70 p-6 rounded-3xl shadow-xl transform hover:-translate-y-4 transition-transform border-2 border-black rotate-[-1deg]">
+                    <div class="text-6xl mb-4 text-chaos-pink spin-slow">
+                        <<i class="fa fa-lightbulb-o"></</i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 text-chaos-yellow">思考服务</h4>
+                    <p>想不出问题答案？我们帮您思考！专业思考团队为您提供各种无用问题的思考服务！</p>
+                    <button onclick="alert('我们已经思考了3秒钟，认为这个问题不值得思考')" 
+                            class="mt-4 px-4 py-2 bg-chaos-blue text-white rounded-full">
+                        让我们思考
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 搞笑表单区域 -->
+        <section class="mb-20 bg-white/60 p-8 rounded-3xl border-4 border-black rotate-[0.5deg]">
+            <h3 class="text-4xl font-bold mb-8 text-center text-chaos-blue">
+                免费<span class="text-chaos-pink">智商测试</span>
+            </h3>
+            
+            <form onsubmit="alert('恭喜您！您的智商超过了本测试的测量范围！'); return false" class="max-w-2xl mx-auto">
+                <div class="mb-6">
+                    <label class="block text-xl mb-2" for="question1">1. 为什么水会湿？</label>
+                    <select id="question1" class="w-full p-3 border-2 border-chaos-green rounded-lg">
+                        <option>因为它不想干</option>
+                        <option>因为它喝了太多水</option>
+                        <option>因为水是液体</option>
+                        <option>因为我碰了它</option>
+                    </select>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xl mb-2" for="question2">2. 以下哪个是正确的？</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 太阳绕着月亮转</label>
+                        <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 猫是狗的一种</label>
+                        <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 这个选项是错的</label>
+                        <label class="flex items-center"><input type="radio" name="q2" class="mr-2"> 我选这个</label>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xl mb-2" for="question3">3. 输入您的答案：</label>
+                    <input type="text" id="question3" placeholder="随便输入点什么" 
+                           class="w-full p-3 border-2 border-chaos-purple rounded-lg">
+                </div>
+                
+                <button type="submit" class="w-full py-4 text-2xl font-bold bg-chaos-yellow hover:bg-chaos-green transition-colors rounded-full glow">
+                    提交测试
+                </button>
+            </form>
+        </section>
+        
+        <!-- 随机移动的元素 -->
+        <div class="fixed top-[30%] right-[5%] w-20 h-20 bg-chaos-pink rounded-full flex items-center justify-center text-white text-3xl cursor-pointer"
+             onmouseover="this.style.left = `${Math.random() * 80 + 10}%`; this.style.top = `${Math.random() * 80 + 10}%`"
+             style="position: fixed;">
+            <<i class="fa fa-bomb"></</i>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black text-white py-10">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-3xl font-bold text-chaos-green">正经网站</h2>
+                    <p>© 2023 版权所有 - 禁止严肃</p>
+                </div>
+                
+                <div class="flex space-x-6 text-2xl">
+                    <a href="#" class="text-chaos-pink hover:text-chaos-blue transition-colors" onclick="alert('我们没有微信')"><<i class="fa fa-weixin"></</i></a>
+                    <a href="#" class="text-chaos-blue hover:text-chaos-green transition-colors" onclick="alert('我们没有微博')"><<i class="fa fa-weibo"></</i></a>
+                    <a href="#" class="text-chaos-green hover:text-chaos-yellow transition-colors" onclick="alert('我们没有抖音')"><<i class="fa fa-music"></</i></a>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center text-sm">
+                <p>本网站纯属恶搞，如有雷同，那也太巧了</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-4 text-chaos-yellow hover:underline">
+                    回到顶部（如果还能回去的话）
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 随机弹出的消息 -->
+    <script>
+        // 随机时间弹出搞笑消息
+        const messages = [
+            "您的电脑正在偷笑",
+            "警告：您笑得太大声了",
+            "提示：这个网站很蠢",
+            "恭喜：您已浪费1分钟",
+            "注意：您的鼠标有点饿了"
+        ];
+        
+        function showRandomMessage() {
+            const randomTime = Math.random() * 30000 + 10000; // 10-40秒之间
+            setTimeout(() => {
+                alert(messages[Math.floor(Math.random() * messages.length)]);
+                showRandomMessage();
+            }, randomTime);
+        }
+        
+        // 页面加载后开始
+        window.onload = showRandomMessage;
+    </script>
+</body>
+</html>
