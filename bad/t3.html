@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极速网络测速工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container {
+            background: rgba(0, 15, 45, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulse 8s infinite linear;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 200, 255, 0.7);
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #a0d2ff;
+        }
+        
+        .card {
+            background: rgba(0, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 150, 255, 0.3);
+        }
+        
+        .speed-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .speed-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0, 40, 80, 0.7);
+            width: 28%;
+            transition: all 0.5s ease;
+        }
+        
+        .speed-item:hover {
+            transform: translateY(-5px);
+            background: rgba(0, 60, 120, 0.8);
+            box-shadow: 0 5px 15px rgba(0, 150, 255, 0.4);
+        }
+        
+        .speed-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #4dccff;
+            text-shadow: 0 0 10px rgba(77, 204, 255, 0.7);
+        }
+        
+        .speed-label {
+            font-size: 1.1rem;
+            color: #a0d2ff;
+        }
+        
+        .progress-container {
+            height: 30px;
+            background: rgba(0, 20, 40, 0.8);
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: white;
+            z-index: 2;
+        }
+        
+        .progress-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 2px, transparent 2px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+        
+        .btn {
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+        }
+        
+        .btn:hover::after {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+        
+        .result {
+            background: rgba(120, 0, 0, 0.4);
+            border: 2px solid rgba(255, 50, 50, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            display: none;
+            animation: pulseRed 2s infinite;
+        }
+        
+        .result h2 {
+            color: #ff4d4d;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .result p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ffb3b3;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #a0d2ff;
+            opacity: 0.7;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 10s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) translateX(calc(100vw * var(--x-offset)));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes pulseRed {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 50, 50, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 50, 50, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 50, 50, 0);
+            }
+        }
+        
+        .wifi-icon {
+            font-size: 4rem;
+            margin: 20px 0;
+            color: #00c6ff;
+            text-shadow: 0 0 15px rgba(0, 198, 255, 0.7);
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .dot {
+            width: 15px;
+            height: 15px;
+            background: #00c6ff;
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+            }
+            40% {
+                transform: scale(1.1);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .speed-display {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .speed-item {
+                width: 90%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <i class="fas fa-wifi wifi-icon"></i>
+        <h1>极速网络测速工具</h1>
+        <p class="subtitle">精准测量您的下载速度、上传速度和网络延迟</p>
+        
+        <div class="card">
+            <h2><i class="fas fa-tachometer-alt"></i> 当前网络状态</h2>
+            <div class="loading">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <p>正在分析您的网络连接...</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-dots"></div>
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-text" id="progressText">准备测速...</div>
+        </div>
+        
+        <div class="speed-display">
+            <div class="speed-item">
+                <div class="speed-label"><i class="fas fa-download"></i> 下载速度</div>
+                <div class="speed-value" id="downloadSpeed">0 Mbps</div>
+                <div class="speed-label">峰值: 待测</div>
+            </div>
+            
+            <div class="speed-item">
+                <div class="speed-label"><i class="fas fa-upload"></i> 上传速度</div>
+                <div class="speed-value" id="uploadSpeed">0 Mbps</div>
+                <div class="speed-label">峰值: 待测</div>
+            </div>
+            
+            <div class="speed-item">
+                <div class="speed-label"><i class="fas fa-clock"></i> 网络延迟</div>
+                <div class="speed-value" id="ping">0 ms</div>
+                <div class="speed-label">稳定性: 待测</div>
+            </div>
+        </div>
+        
+        <button class="btn" id="startBtn">
+            <i class="fas fa-play"></i> 开始测速
+        </button>
+        
+        <div class="result" id="result">
+            <h2><i class="fas fa-exclamation-triangle"></i> 测速失败!</h2>
+            <p>我们无法完成网络测速。可能的原因包括：</p>
+            <ul style="text-align: left; margin: 15px 30px;">
+                <li>您的网络连接不稳定或已断开</li>
+                <li>您的设备防火墙阻止了测速请求</li>
+                <li>测速服务器暂时不可用</li>
+                <li>您的网络套餐可能限制了测速功能</li>
+            </ul>
+            <p>建议您检查网络连接后重试，或联系您的网络服务提供商。</p>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 极速网络测速工具 | 专业级网络诊断解决方案</p>
+            <p style="font-size: 0.8rem; margin-top: 5px;">注意：本测速结果仅供参考，实际网络速度可能因多种因素而异</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 创建背景粒子
+            createParticles();
+            
+            const startBtn = document.getElementById('startBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const downloadSpeed = document.getElementById('downloadSpeed');
+            const uploadSpeed = document.getElementById('uploadSpeed');
+            const ping = document.getElementById('ping');
+            const result = document.getElementById('result');
+            
+            startBtn.addEventListener('click', startSpeedTest);
+            
+            function startSpeedTest() {
+                // 重置状态
+                progressBar.style.width = '0%';
+                progressText.textContent = '准备测速...';
+                downloadSpeed.textContent = '0 Mbps';
+                uploadSpeed.textContent = '0 Mbps';
+                ping.textContent = '0 ms';
+                result.style.display = 'none';
+                startBtn.disabled = true;
+                startBtn.innerHTML = '<i class="fas fa-sync fa-spin"></i> 测速中...';
+                
+                // 模拟测速过程
+                simulateTest();
+            }
+            
+            function simulateTest() {
+                // 第一阶段：检测网络
+                progressBar.style.width = '25%';
+                progressText.textContent = '正在检测网络连接...';
+                
+                setTimeout(() => {
+                    // 第二阶段：测试下载速度
+                    progressBar.style.width = '40%';
+                    progressText.textContent = '测试下载速度...';
+                    
+                    // 模拟下载速度增长
+                    simulateSpeedIncrease(downloadSpeed, 120, 100, 300, () => {
+                        // 第三阶段：测试上传速度
+                        progressBar.style.width = '65%';
+                        progressText.textContent = '测试上传速度...';
+                        
+                        // 模拟上传速度增长
+                        simulateSpeedIncrease(uploadSpeed, 25, 80, 200, () => {
+                            // 第四阶段：测试延迟
+                            progressBar.style.width = '85%';
+                            progressText.textContent = '测试网络延迟...';
+                            
+                            // 模拟延迟测试
+                            let pingValue = 15;
+                            let pingInterval = setInterval(() => {
+                                pingValue += Math.floor(Math.random() * 10) - 4;
+                                if (pingValue < 10) pingValue = 10;
+                                ping.textContent = pingValue + ' ms';
+                            }, 200);
+                            
+                            setTimeout(() => {
+                                clearInterval(pingInterval);
+                                progressBar.style.width = '100%';
+                                progressText.textContent = '分析结果...';
+                                
+                                setTimeout(() => {
+                                    // 显示测速失败结果
+                                    result.style.display = 'block';
+                                    startBtn.disabled = false;
+                                    startBtn.innerHTML = '<i class="fas fa-redo"></i> 重新测速';
+                                }, 1500);
+                            }, 2500);
+                        });
+                    });
+                }, 2000);
+            }
+            
+            function simulateSpeedIncrease(element, maxSpeed, increment, interval, callback) {
+                let currentSpeed = 0;
+                let incrementValue = increment;
+                
+                const intervalId = setInterval(() => {
+                    currentSpeed += incrementValue;
+                    
+                    // 随机波动
+                    incrementValue = increment + Math.floor(Math.random() * 20) - 10;
+                    if (incrementValue < 10) incrementValue = 10;
+                    
+                    // 接近最大值时减速
+                    if (currentSpeed > maxSpeed * 0.8) {
+                        incrementValue = increment * 0.3;
+                    }
+                    
+                    if (currentSpeed >= maxSpeed) {
+                        currentSpeed = maxSpeed;
+                        clearInterval(intervalId);
+                        element.textContent = maxSpeed + ' Mbps';
+                        setTimeout(callback, 500);
+                    } else {
+                        element.textContent = Math.round(currentSpeed) + ' Mbps';
+                    }
+                }, interval);
+            }
+            
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 50;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // 随机大小
+                    const size = Math.random() * 5 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // 随机位置
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    // 随机动画参数
+                    particle.style.setProperty('--x-offset', Math.random() * 0.5 - 0.25);
+                    particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                    particle.style.animationDelay = `${Math.random() * 5}s`;
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
