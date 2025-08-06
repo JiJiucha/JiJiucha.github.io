@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>极速网络测速工具</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -10,7 +10,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -19,24 +20,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+            touch-action: manipulation;
         }
         
         .container {
-            background: rgba(0, 15, 45, 0.85);
+            background: rgba(0, 15, 45, 0.92);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 800px;
-            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
             text-align: center;
             position: relative;
             overflow: hidden;
             z-index: 10;
+            border: 1px solid rgba(0, 150, 255, 0.2);
         }
         
         .container::before {
@@ -52,68 +55,75 @@
         }
         
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0, 200, 255, 0.7);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 8px rgba(0, 200, 255, 0.7);
             background: linear-gradient(90deg, #00c6ff, #0072ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         
         .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
             color: #a0d2ff;
+            line-height: 1.4;
         }
         
         .card {
             background: rgba(0, 30, 60, 0.6);
             border-radius: 15px;
-            padding: 30px;
-            margin: 25px 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 150, 255, 0.3);
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(0, 150, 255, 0.2);
         }
         
         .speed-display {
             display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
+            flex-direction: column;
+            margin: 20px 0;
         }
         
         .speed-item {
             text-align: center;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 15px;
+            border-radius: 12px;
             background: rgba(0, 40, 80, 0.7);
-            width: 28%;
-            transition: all 0.5s ease;
+            width: 100%;
+            margin-bottom: 12px;
+            transition: all 0.4s ease;
+            position: relative;
         }
         
-        .speed-item:hover {
-            transform: translateY(-5px);
-            background: rgba(0, 60, 120, 0.8);
-            box-shadow: 0 5px 15px rgba(0, 150, 255, 0.4);
+        .speed-item:last-child {
+            margin-bottom: 0;
         }
         
         .speed-value {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 8px 0;
             color: #4dccff;
-            text-shadow: 0 0 10px rgba(77, 204, 255, 0.7);
+            text-shadow: 0 0 8px rgba(77, 204, 255, 0.7);
         }
         
         .speed-label {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #a0d2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
         
         .progress-container {
-            height: 30px;
+            height: 26px;
             background: rgba(0, 20, 40, 0.8);
-            border-radius: 15px;
-            margin: 30px 0;
+            border-radius: 13px;
+            margin: 25px 0;
             overflow: hidden;
             position: relative;
         }
@@ -122,7 +132,7 @@
             height: 100%;
             width: 0;
             background: linear-gradient(90deg, #00c6ff, #0072ff);
-            border-radius: 15px;
+            border-radius: 13px;
             transition: width 0.5s ease;
             position: relative;
         }
@@ -132,9 +142,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-weight: bold;
+            font-weight: 600;
             color: white;
             z-index: 2;
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
         
         .progress-dots {
@@ -143,8 +155,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 2px, transparent 2px);
-            background-size: 20px 20px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 1.5px, transparent 1.5px);
+            background-size: 15px 15px;
             opacity: 0.3;
         }
         
@@ -152,71 +164,56 @@
             background: linear-gradient(90deg, #00c6ff, #0072ff);
             color: white;
             border: none;
-            padding: 16px 45px;
-            font-size: 1.2rem;
+            padding: 14px 35px;
+            font-size: 1.05rem;
             border-radius: 50px;
             cursor: pointer;
-            margin: 20px 0;
-            font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+            margin: 15px 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 114, 255, 0.4);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.6);
+            display: inline-block;
+            width: 100%;
+            max-width: 300px;
         }
         
         .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(30deg);
-            transition: all 0.6s;
-        }
-        
-        .btn:hover::after {
-            transform: rotate(30deg) translate(20%, 20%);
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 114, 255, 0.4);
         }
         
         .result {
             background: rgba(120, 0, 0, 0.4);
             border: 2px solid rgba(255, 50, 50, 0.5);
             border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
+            padding: 20px;
+            margin-top: 25px;
             display: none;
             animation: pulseRed 2s infinite;
         }
         
         .result h2 {
             color: #ff4d4d;
-            font-size: 2rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
         }
         
         .result p {
-            font-size: 1.1rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 1.5;
             color: #ffb3b3;
+            text-align: left;
         }
         
         .footer {
-            margin-top: 30px;
-            font-size: 0.9rem;
+            margin-top: 20px;
+            font-size: 0.8rem;
             color: #a0d2ff;
             opacity: 0.7;
+            line-height: 1.4;
         }
         
         .particles {
@@ -226,6 +223,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+            pointer-events: none;
         }
         
         .particle {
@@ -233,6 +231,28 @@
             background: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
             animation: float 10s infinite linear;
+        }
+        
+        .wifi-icon {
+            font-size: 3.2rem;
+            margin: 15px 0;
+            color: #00c6ff;
+            text-shadow: 0 0 12px rgba(0, 198, 255, 0.7);
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #00c6ff;
+            border-radius: 50%;
+            margin: 0 4px;
+            animation: bounce 1.5s infinite ease-in-out;
         }
         
         @keyframes float {
@@ -266,41 +286,11 @@
                 box-shadow: 0 0 0 0 rgba(255, 50, 50, 0.4);
             }
             70% {
-                box-shadow: 0 0 0 15px rgba(255, 50, 50, 0);
+                box-shadow: 0 0 0 12px rgba(255, 50, 50, 0);
             }
             100% {
                 box-shadow: 0 0 0 0 rgba(255, 50, 50, 0);
             }
-        }
-        
-        .wifi-icon {
-            font-size: 4rem;
-            margin: 20px 0;
-            color: #00c6ff;
-            text-shadow: 0 0 15px rgba(0, 198, 255, 0.7);
-        }
-        
-        .loading {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        
-        .dot {
-            width: 15px;
-            height: 15px;
-            background: #00c6ff;
-            border-radius: 50%;
-            margin: 0 5px;
-            animation: bounce 1.5s infinite ease-in-out;
-        }
-        
-        .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .dot:nth-child(3) {
-            animation-delay: 0.4s;
         }
         
         @keyframes bounce {
@@ -312,24 +302,103 @@
             }
         }
         
-        @media (max-width: 600px) {
+        /* 小屏幕设备优化 */
+        @media (max-width: 400px) {
             .container {
-                padding: 25px 15px;
+                padding: 20px 15px;
+                border-radius: 18px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.6rem;
+            }
+            
+            .subtitle {
+                font-size: 0.88rem;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .speed-value {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 13px;
+                font-size: 1rem;
+            }
+            
+            .result {
+                padding: 16px;
+            }
+            
+            .result h2 {
+                font-size: 1.3rem;
+            }
+        }
+        
+        /* 平板和桌面设备 */
+        @media (min-width: 768px) {
+            .container {
+                padding: 35px;
+                max-width: 500px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
             }
             
             .speed-display {
-                flex-direction: column;
-                align-items: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
             }
             
             .speed-item {
-                width: 90%;
-                margin: 10px 0;
+                width: 48%;
+                margin-bottom: 15px;
             }
+            
+            .speed-item:last-child {
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+        
+        /* 大屏幕设备 */
+        @media (min-width: 992px) {
+            .container {
+                max-width: 550px;
+            }
+            
+            .speed-display {
+                flex-direction: row;
+            }
+            
+            .speed-item {
+                width: 32%;
+                margin-bottom: 0;
+            }
+            
+            .speed-item:last-child {
+                width: 32%;
+            }
+        }
+        
+        /* 防止长按出现菜单 */
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
@@ -338,23 +407,23 @@
     
     <div class="container">
         <i class="fas fa-wifi wifi-icon"></i>
-        <h1>极速网络测速工具</h1>
-        <p class="subtitle">精准测量您的下载速度、上传速度和网络延迟</p>
+        <h1 class="no-select">极速网络测速工具</h1>
+        <p class="subtitle no-select">精准测量您的下载速度、上传速度和网络延迟</p>
         
         <div class="card">
-            <h2><i class="fas fa-tachometer-alt"></i> 当前网络状态</h2>
+            <h2 class="no-select"><i class="fas fa-tachometer-alt"></i> 当前网络状态</h2>
             <div class="loading">
                 <div class="dot"></div>
                 <div class="dot"></div>
                 <div class="dot"></div>
             </div>
-            <p>正在分析您的网络连接...</p>
+            <p class="no-select">正在分析您的网络连接...</p>
         </div>
         
         <div class="progress-container">
             <div class="progress-dots"></div>
             <div class="progress-bar" id="progressBar"></div>
-            <div class="progress-text" id="progressText">准备测速...</div>
+            <div class="progress-text no-select" id="progressText">准备测速...</div>
         </div>
         
         <div class="speed-display">
@@ -377,25 +446,25 @@
             </div>
         </div>
         
-        <button class="btn" id="startBtn">
+        <button class="btn no-select" id="startBtn">
             <i class="fas fa-play"></i> 开始测速
         </button>
         
         <div class="result" id="result">
-            <h2><i class="fas fa-exclamation-triangle"></i> 测速失败!</h2>
-            <p>我们无法完成网络测速。可能的原因包括：</p>
-            <ul style="text-align: left; margin: 15px 30px;">
-                <li>您的网络连接不稳定或已断开</li>
-                <li>您的设备防火墙阻止了测速请求</li>
-                <li>测速服务器暂时不可用</li>
-                <li>您的网络套餐可能限制了测速功能</li>
+            <h2 class="no-select"><i class="fas fa-exclamation-triangle"></i> 测速失败!</h2>
+            <p class="no-select">我们无法完成网络测速。可能的原因包括：</p>
+            <ul style="text-align: left; margin: 12px 20px 12px 30px; font-size: 0.95rem;">
+                <li class="no-select">您的网络连接不稳定或已断开</li>
+                <li class="no-select">您的设备防火墙阻止了测速请求</li>
+                <li class="no-select">测速服务器暂时不可用</li>
+                <li class="no-select">您的网络套餐可能限制了测速功能</li>
             </ul>
-            <p>建议您检查网络连接后重试，或联系您的网络服务提供商。</p>
+            <p class="no-select">建议您检查网络连接后重试，或联系您的网络服务提供商。</p>
         </div>
         
-        <div class="footer">
+        <div class="footer no-select">
             <p>© 2023 极速网络测速工具 | 专业级网络诊断解决方案</p>
-            <p style="font-size: 0.8rem; margin-top: 5px;">注意：本测速结果仅供参考，实际网络速度可能因多种因素而异</p>
+            <p style="font-size: 0.75rem; margin-top: 5px;">注意：本测速结果仅供参考，实际网络速度可能因多种因素而异</p>
         </div>
     </div>
 
@@ -413,6 +482,18 @@
             const result = document.getElementById('result');
             
             startBtn.addEventListener('click', startSpeedTest);
+            
+            // 在移动设备上添加触摸事件
+            startBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.classList.add('active');
+            });
+            
+            startBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.classList.remove('active');
+                startSpeedTest();
+            });
             
             function startSpeedTest() {
                 // 重置状态
@@ -469,6 +550,11 @@
                                     result.style.display = 'block';
                                     startBtn.disabled = false;
                                     startBtn.innerHTML = '<i class="fas fa-redo"></i> 重新测速';
+                                    
+                                    // 添加一点震动反馈（如果设备支持）
+                                    if (navigator.vibrate) {
+                                        navigator.vibrate([100, 50, 100]);
+                                    }
                                 }, 1500);
                             }, 2500);
                         });
@@ -505,14 +591,14 @@
             
             function createParticles() {
                 const particlesContainer = document.getElementById('particles');
-                const particleCount = 50;
+                const particleCount = window.innerWidth < 768 ? 30 : 40;
                 
                 for (let i = 0; i < particleCount; i++) {
                     const particle = document.createElement('div');
                     particle.classList.add('particle');
                     
                     // 随机大小
-                    const size = Math.random() * 5 + 1;
+                    const size = Math.random() * 4 + 1;
                     particle.style.width = `${size}px`;
                     particle.style.height = `${size}px`;
                     
