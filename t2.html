@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统错误 - 致命异常</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0078d7;
+            color: white;
+            line-height: 1.6;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            cursor: default;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .error-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .error-icon {
+            font-size: 3rem;
+            margin-right: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        .error-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .error-content {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+            margin: 20px 0;
+        }
+        
+        .error-code {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #ffcccc;
+        }
+        
+        .progress-container {
+            background: rgba(0, 0, 0, 0.3);
+            height: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #ff5555, #ffaa00);
+            border-radius: 15px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+        
+        button:hover {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .solution-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .solution-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #aaffaa;
+        }
+        
+        .solution-content {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+        
+        .solution-image {
+            width: 200px;
+            height: 200px;
+            background: #555;
+            margin: 20px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            animation: spin 10s linear infinite;
+        }
+        
+        .counter {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .fake-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            animation: slideIn 0.5s, fadeOut 0.5s 4.5s forwards;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.7; transform: scale(1); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .virus-scan {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        
+        .scan-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .scan-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .flashing-text {
+            animation: flash 1s infinite;
+        }
+        
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-header">
+            <div class="error-icon">:(</div>
+            <div class="error-title">你的设备遇到问题，需要重启</div>
+        </div>
+        
+        <div class="error-content">
+            <div class="error-code">错误代码：0xDEADBEEF</div>
+            <p>我们只收集某些错误信息，然后你可以重启设备。</p>
+            <p class="flashing-text">100% 完成</p>
+            
+            <div class="virus-scan">
+                <div class="scan-item">
+                    <span class="scan-icon">☢</span>
+                    <span>检测到异常活动: 用户过于频繁地刷新猫图</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-icon">⚠</span>
+                    <span>系统检测到不寻常的巧克力残留物</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-icon">☣</span>
+                    <span>CPU 使用率异常: 99% 用于思考人生意义</span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            
+            <p>有关此问题的详细信息和可能的解决方案，请访问: <br>https://support.microsoft.com/help/404</p>
+            <p>如果致电支持人员，请向他们提供以下信息: <br>终止代码: HUGS_NOT_BUGS</p>
+        </div>
+        
+        <div class="action-buttons">
+            <button id="restartBtn">立即重启 (推荐)</button>
+            <button id="advancedBtn">高级选项</button>
+            <button id="ignoreBtn">忽略并继续冒险</button>
+        </div>
+        
+        <div class="solution-screen" id="solutionScreen">
+            <div class="solution-title">问题已解决!</div>
+            <div class="solution-image">🎉</div>
+            <div class="solution-content">
+                <p>我们的高级诊断发现根本原因:</p>
+                <p>你的设备缺少足够的咖啡因和正能量</p>
+                <p>解决方案: 立即站起来，伸展身体，喝杯咖啡，然后继续你伟大的工作!</p>
+                <p>系统已自动应用此修复方案，你现在可以安全地继续使用设备。</p>
+            </div>
+            <button id="continueBtn">继续使用设备</button>
+        </div>
+    </div>
+    
+    <div class="counter">内存转储中... 0%</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const restartBtn = document.getElementById('restartBtn');
+            const advancedBtn = document.getElementById('advancedBtn');
+            const ignoreBtn = document.getElementById('ignoreBtn');
+            const solutionScreen = document.getElementById('solutionScreen');
+            const continueBtn = document.getElementById('continueBtn');
+            const counter = document.querySelector('.counter');
+            
+            // 模拟进度条
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    // 显示解决方案屏幕
+                    setTimeout(() => {
+                        document.querySelector('.error-content').style.display = 'none';
+                        document.querySelector('.action-buttons').style.display = 'none';
+                        solutionScreen.style.display = 'block';
+                    }, 800);
+                }
+                
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}%`;
+                
+                // 更新内存计数器
+                counter.textContent = `内存转储中... ${Math.min(100, Math.round(progress * 0.8))}%`;
+            }, 300);
+            
+            // 创建虚假通知
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.className = 'fake-notification';
+                notification.innerHTML = '🔒 安全警报: 检测到试图访问猫咪图片库的未授权请求';
+                document.body.appendChild(notification);
+                
+                // 自动移除通知
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }, 4000);
+            
+            // 按钮事件
+            restartBtn.addEventListener('click', function() {
+                this.innerHTML = '正在重启... <span class="flashing-text">请不要关闭电源</span>';
+                this.disabled = true;
+                
+                // 模拟重启效果
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '#000';
+                    document.body.innerHTML = '<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#0f0;font-family:monospace;text-align:center;">BIOS 初始化中...<br><br>检测到键盘: ☕ 咖啡按键缺失<br>系统挂起直到咖啡因水平恢复</div>';
+                }, 2000);
+            });
+            
+            advancedBtn.addEventListener('click', function() {
+                alert('高级选项:\n\n1. 启用禅模式 (不可用)\n2. 增加幽默感 (已启用)\n3. 禁用所有工作功能 (已启用)\n4. 超频咖啡机 (需要硬件支持)');
+            });
+            
+            ignoreBtn.addEventListener('click', function() {
+                alert('⚠️ 警告: 忽略此错误可能导致:\n- 自发的舞蹈休息\n- 不可预测的猫咪视频播放\n- 生产力下降100%\n\n你真的要继续吗？');
+                this.textContent = '冒险继续中...';
+                this.disabled = true;
+            });
+            
+            continueBtn.addEventListener('click', function() {
+                document.body.innerHTML = `
+                <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;background:#0078d7;color:white;font-family:monospace;text-align:center;padding:20px;">
+                    <h1 style="font-size:2.5rem;margin-bottom:20px;">🎉 操作成功!</h1>
+                    <p style="font-size:1.2rem;max-width:600px;margin-bottom:30px;">
+                        你的设备已通过正能量注入和咖啡因补充完全恢复功能。<br>
+                        你现在可以安全地继续浏览猫咪图片、观看搞笑视频和完成实际工作（可选）。
+                    </p>
+                    <div style="font-size:3rem;margin:20px;">☕ + 😊 = 💻✔️</div>
+                    <button onclick="location.reload()" style="padding:10px 20px;background:rgba(255,255,255,0.2);color:white;border:1px solid white;border-radius:4px;cursor:pointer;margin-top:20px;">
+                        模拟另一个系统错误
+                    </button>
+                </div>
+                `;
+            });
+            
+            // 随机错误信息效果
+            setInterval(() => {
+                const errorMessages = [
+                    "检测到键盘输入: '我需要假期'",
+                    "系统资源不足: 可用幽默感 < 10%",
+                    "警告: 咖啡因水平低于临界值",
+                    "CPU 核心1 正在思考存在的意义",
+                    "内存泄漏检测: 未完成的任务堆积"
+                ];
+                
+                const randomMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+                const notification = document.createElement('div');
+                notification.className = 'fake-notification';
+                notification.innerHTML = `⚠️ ${randomMessage}`;
+                document.body.appendChild(notification);
+                
+                // 自动移除通知
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }, 8000);
+        });
+    </script>
+</body>
+</html>
