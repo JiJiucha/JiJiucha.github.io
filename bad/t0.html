@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>棍母 - 零宽字符加解密工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .card {
+            background: rgba(30, 30, 50, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #4fc3f7;
+        }
+        
+        .card-title i {
+            margin-right: 12px;
+            font-size: 1.6rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            background: rgba(10, 10, 20, 0.7);
+            border: 2px solid #3949ab;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.3);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-encrypt {
+            background: linear-gradient(to right, #2196f3, #0d47a1);
+            color: white;
+        }
+        
+        .btn-decrypt {
+            background: linear-gradient(to right, #ff9800, #e65100);
+            color: white;
+        }
+        
+        .btn-copy {
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+            color: white;
+        }
+        
+        .btn-clear {
+            background: linear-gradient(to right, #f44336, #b71c1c);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .visualization {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .vis-container {
+            width: 100%;
+            height: 200px;
+            background: rgba(10, 10, 20, 0.8);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #5c6bc0;
+            margin: 20px 0;
+        }
+        
+        .text-example {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #bb86fc;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hidden-chars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            z-index: 1;
+        }
+        
+        .char {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .info-card {
+            background: rgba(40, 40, 70, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .info-card h3 {
+            color: #bb86fc;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-card h3 i {
+            margin-right: 10px;
+        }
+        
+        .info-card ul {
+            padding-left: 20px;
+        }
+        
+        .info-card li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .warning {
+            background: rgba(255, 152, 0, 0.2);
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .copied-notice {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                min-width: 100%;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-lock"></i> 零宽字符加解密工具</h1>
+            <p class="subtitle">使用零宽字符技术隐藏和显示信息 - 将秘密信息嵌入到普通文本中，肉眼无法察觉</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-edit"></i>
+                <h2>文本输入区</h2>
+            </div>
+            <textarea id="inputText" placeholder="在此输入要加密的文本，或粘贴需要解密的文本..."></textarea>
+            
+            <div class="btn-group">
+                <button class="btn btn-encrypt" id="encryptBtn">
+                    <i class="fas fa-lock"></i> 加密文本
+                </button>
+                <button class="btn btn-decrypt" id="decryptBtn">
+                    <i class="fas fa-unlock"></i> 解密文本
+                </button>
+                <button class="btn btn-copy" id="copyBtn">
+                    <i class="fas fa-copy"></i> 复制结果
+                </button>
+                <button class="btn btn-clear" id="clearBtn">
+                    <i class="fas fa-broom"></i> 清除所有
+                </button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-key"></i>
+                <h2>加密/解密结果</h2>
+            </div>
+            <textarea id="outputText" placeholder="加密或解密的结果将显示在这里..." readonly></textarea>
+        </div>
+        
+        <div class="visualization">
+            <h3>加密原理可视化</h3>
+            <p>普通文本中隐藏着不可见的零宽字符</p>
+            <div class="vis-container">
+                <div class="text-example">公开信息</div>
+                <div class="hidden-chars" id="hiddenChars"></div>
+            </div>
+            <p>移动鼠标到上方区域可查看隐藏字符位置</p>
+        </div>
+        
+        <div class="info-section">
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> 零宽字符加密原理</h3>
+                <ul>
+                    <li>使用Unicode中的零宽字符（如U+200B, U+200C, U+200D）作为信息载体</li>
+                    <li>每个零宽字符不可见且不占用视觉空间</li>
+                    <li>将文本转换为二进制，用不同零宽字符代表0和1</li>
+                    <li>加密信息可嵌入到任何文本中而不改变其外观</li>
+                    <li>只有通过特定工具才能提取隐藏信息</li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-lightbulb"></i> 使用场景</h3>
+                <ul>
+                    <li>在社交媒体中传递隐秘信息</li>
+                    <li>为文档添加数字水印</li>
+                    <li>敏感信息的隐蔽传输</li>
+                    <li>文本版权保护</li>
+                    <li>趣味性的秘密通信</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="warning">
+            <h3><i class="fas fa-exclamation-triangle"></i> 注意事项</h3>
+            <p>零宽字符加密不是强加密方法，不适合高度敏感信息。部分平台可能会过滤零宽字符导致信息丢失。请勿用于非法用途。</p>
+        </div>
+    </div>
+    
+    <div class="copied-notice" id="copiedNotice">结果已复制到剪贴板！</div>
+    
+    <footer>
+        <p>© 2023 零宽字符加解密工具 | 基于Unicode零宽字符技术 | 设计：前端大师</p>
+    </footer>
+
+    <script>
+        // 零宽字符定义
+        const ZERO_WIDTH_SPACE = '\u200B';      // 零宽空格
+        const ZERO_WIDTH_NON_JOINER = '\u200C'; // 零宽非连接符
+        const ZERO_WIDTH_JOINER = '\u200D';     // 零宽连接符
+        
+        // 获取DOM元素
+        const inputText = document.getElementById('inputText');
+        const outputText = document.getElementById('outputText');
+        const encryptBtn = document.getElementById('encryptBtn');
+        const decryptBtn = document.getElementById('decryptBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const hiddenChars = document.getElementById('hiddenChars');
+        const copiedNotice = document.getElementById('copiedNotice');
+        
+        // 创建隐藏字符可视化
+        function createHiddenCharsVisualization() {
+            hiddenChars.innerHTML = '';
+            const chars = [ZERO_WIDTH_SPACE, ZERO_WIDTH_NON_JOINER, ZERO_WIDTH_JOINER];
+            const colors = ['#FF5252', '#4CAF50', '#2196F3'];
+            
+            // 创建100个隐藏字符点
+            for (let i = 0; i < 100; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const charEl = document.createElement('div');
+                charEl.className = 'char';
+                charEl.textContent = char;
+                charEl.style.color = color;
+                charEl.style.position = 'absolute';
+                charEl.style.top = `${Math.random() * 100}%`;
+                charEl.style.left = `${Math.random() * 100}%`;
+                charEl.style.opacity = '0';
+                charEl.style.transition = 'opacity 0.3s';
+                
+                charEl.addEventListener('mouseover', () => {
+                    charEl.style.opacity = '1';
+                });
+                
+                charEl.addEventListener('mouseout', () => {
+                    charEl.style.opacity = '0.1';
+                });
+                
+                hiddenChars.appendChild(charEl);
+            }
+        }
+        
+        // 文本加密函数
+        function encryptText(text) {
+            // 将文本转换为二进制字符串
+            let binary = '';
+            for (let i = 0; i < text.length; i++) {
+                const charCode = text.charCodeAt(i).toString(2);
+                // 确保每个字符的二进制表示是16位
+                binary += '0'.repeat(16 - charCode.length) + charCode;
+            }
+            
+            // 使用零宽字符表示二进制
+            let encrypted = '';
+            for (let i = 0; i < binary.length; i++) {
+                switch (binary[i]) {
+                    case '0':
+                        encrypted += ZERO_WIDTH_SPACE;
+                        break;
+                    case '1':
+                        encrypted += ZERO_WIDTH_NON_JOINER;
+                        break;
+                }
+                // 每4位添加一个分隔符
+                if ((i + 1) % 4 === 0) {
+                    encrypted += ZERO_WIDTH_JOINER;
+                }
+            }
+            
+            return encrypted;
+        }
+        
+        // 文本解密函数
+        function decryptText(encrypted) {
+            // 移除分隔符
+            let binary = '';
+            for (let i = 0; i < encrypted.length; i++) {
+                const char = encrypted[i];
+                if (char === ZERO_WIDTH_SPACE) {
+                    binary += '0';
+                } else if (char === ZERO_WIDTH_NON_JOINER) {
+                    binary += '1';
+                }
+                // 忽略分隔符
+            }
+            
+            // 将二进制转换回文本
+            let text = '';
+            for (let i = 0; i < binary.length; i += 16) {
+                const binaryChunk = binary.substring(i, i + 16);
+                if (binaryChunk.length === 16) {
+                    const charCode = parseInt(binaryChunk, 2);
+                    text += String.fromCharCode(charCode);
+                }
+            }
+            
+            return text;
+        }
+        
+        // 显示复制成功通知
+        function showCopiedNotice() {
+            copiedNotice.style.display = 'block';
+            setTimeout(() => {
+                copiedNotice.style.display = 'none';
+            }, 2000);
+        }
+        
+        // 事件监听器
+        encryptBtn.addEventListener('click', () => {
+            const text = inputText.value.trim();
+            if (text) {
+                const encrypted = encryptText(text);
+                outputText.value = "正常文本" + encrypted + "结尾";
+            } else {
+                outputText.value = "请输入要加密的文本";
+            }
+        });
+        
+        decryptBtn.addEventListener('click', () => {
+            const text = inputText.value.trim();
+            if (text) {
+                try {
+                    const decrypted = decryptText(text);
+                    outputText.value = decrypted || "未检测到有效加密信息";
+                } catch (e) {
+                    outputText.value = "解密失败：无效的加密文本";
+                }
+            } else {
+                outputText.value = "请输入要解密的文本";
+            }
+        });
+        
+        copyBtn.addEventListener('click', () => {
+            if (outputText.value) {
+                outputText.select();
+                document.execCommand('copy');
+                showCopiedNotice();
+            }
+        });
+        
+        clearBtn.addEventListener('click', () => {
+            inputText.value = '';
+            outputText.value = '';
+        });
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            createHiddenCharsVisualization();
+            // 设置示例文本
+            inputText.value = "这是一个棍母信息";
+        });
+    </script>
+</body>
+</html>
