@@ -486,7 +486,7 @@
             const text = inputText.value.trim();
             if (text) {
                 const encrypted = encryptText(text);
-                outputText.value = "正常文本" + encrypted + "结尾";
+                outputText.value = encrypted;
             } else {
                 outputText.value = "请输入要加密的文本";
             }
