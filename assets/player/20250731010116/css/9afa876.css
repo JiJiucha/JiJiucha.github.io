@@ -1,0 +1,27 @@
+.premium-user-badge[data-v-041d1d72],
+.pro-user-badge[data-v-041d1d72] {
+    position: relative
+}
+
+.premium-user-badge[data-v-041d1d72]:after,
+.pro-user-badge[data-v-041d1d72]:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 1.4em;
+    height: 1.4em;
+    margin-left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: contain
+}
+
+.pro-user-badge[data-v-041d1d72]:after {
+    background-image: url(/assets/player/20250731010116/img/icon_adfree.55303a6.svg)
+}
+
+.premium-user-badge[data-v-041d1d72]:after {
+    background-image: url(/assets/player/20250731010116/img/icon_premium.07897c7.svg)
+}
