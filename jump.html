@@ -1,0 +1,19 @@
+<script>
+// 获取URL中名为"url"的参数
+const urlParams = new URLSearchParams(window.location.search);
+const targetUrl = urlParams.get('url');
+
+if (targetUrl) {
+    // 验证URL格式
+    try {
+        const parsedUrl = new URL(targetUrl);
+        location.href = targetUrl;
+    } catch (error) {
+        console.error('URL格式无效:', targetUrl);
+        window.close(); // URL格式无效则关闭页面
+    }
+} else {
+    // 参数不存在则关闭页面
+    window.close();
+}
+</script>
