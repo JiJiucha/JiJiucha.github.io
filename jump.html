@@ -10,10 +10,7 @@ if (targetUrl) {
         location.href = targetUrl;
     } catch (error) {
         console.error('URL格式无效:', targetUrl);
-        window.close(); // URL格式无效则关闭页面
     }
-} else {
-    // 参数不存在则关闭页面
-    window.close();
 }
+window.close();
 </script>
