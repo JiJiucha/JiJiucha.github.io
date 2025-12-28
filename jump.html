@@ -4,13 +4,10 @@ const urlParams = new URLSearchParams(window.location.search);
 const targetUrl = urlParams.get('url');
 
 if (targetUrl) {
-    // 验证URL格式
-    try {
-        const parsedUrl = new URL(targetUrl);
-        location.href = targetUrl;
-    } catch (error) {
-        console.error('URL格式无效:', targetUrl);
-    }
+    location.href = targetUrl;
+    
 }
-window.close();
+else{
+console.error('未提供URL');
+window.close();}
 </script>
