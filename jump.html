@@ -1,16 +1,42 @@
-<script>
-// 获取URL中名为"url"的参数
-const urlParams = new URLSearchParams(window.location.search);
-const targetUrl = urlParams.get('url');
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+</head>
+<body>
+    <script>
+        (function() {
+            var ua = navigator.userAgent.toLowerCase();
 
-if (targetUrl) {
-    // 验证URL格式
-    try {
-        const parsedUrl = new URL(targetUrl);
-        location.href = targetUrl;
-    } catch (error) {
-        console.error('URL格式无效:', targetUrl);
-    }
-}
-window.close();
-</script>
+            // ---------- 设备类型检测 ----------
+            // 1. 苹果设备（iPhone / iPad / iPod）
+            var isApple = /iphone|ipad|ipod/.test(ua);
+            // 2. 安卓设备（android）
+            var isAndroid = /android/.test(ua);
+            // 3. 其他（视为 PC）
+
+            // ---------- 链接配置 ----------
+            // 基础链接（安卓 & PC 共用）
+            var baseUrl = 'https://ys-api.mihoyo.com/event/download_porter/link/ys_cn/official/';
+            
+            // App Store 原神页面（固定链接）
+            var appStoreUrl = 'https://apps.apple.com/cn/app/原神-空月之歌/id1467190251';
+
+            // 根据设备类型决定跳转目标
+            var targetUrl = '';
+            if (isApple) {
+                targetUrl = appStoreUrl;
+            } else if (isAndroid) {
+                targetUrl = baseUrl + 'android_backup319';
+            } else {
+                targetUrl = baseUrl + 'pc_backup319';
+            }
+
+            // 执行跳转
+            window.location.href = targetUrl;
+        })();
+    </script>
+</body>
+</html>
