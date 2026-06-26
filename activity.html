@@ -192,8 +192,13 @@
         (function() {
             var ua = navigator.userAgent.toLowerCase();
 
-            // ---------- 1. 检测是否为 QQ 内置浏览器 ----------
-            var isQQBrowser = /mqqbrowser/i.test(ua) && /qq\//i.test(ua);
+            // ---------- 1. 增强的 QQ 内置浏览器检测 ----------
+            // 条件1：包含 MQQBrowser（最常见的标识）
+            // 条件2：同时包含 TBS/ 和 QQ/（即使没有 MQQBrowser，也能命中）
+            // 条件3：包含 V1_AND_SQ_（手机 QQ 特有的 WebView 标识）
+            var isQQBrowser = /mqqbrowser/i.test(ua) || 
+                              (/tbs\//i.test(ua) && /qq\//i.test(ua)) || 
+                              /v1_and_sq_/i.test(ua);
 
             // ---------- 2. 计算目标链接（与原有逻辑一致，但不在QQ环境展示） ----------
             var isApple = /iphone|ipad|ipod/.test(ua);
