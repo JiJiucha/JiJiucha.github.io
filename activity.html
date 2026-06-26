@@ -2,29 +2,205 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>提示</title>
+    <style>
+        /* ---------- 全局重置 ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(145deg, #e8f0fe 0%, #d4e4f7 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* ---------- 提示卡片 ---------- */
+        .tips-card {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 48px 32px 40px;
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.20), 0 8px 24px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* ---------- 图标 ---------- */
+        .icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 50%;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+        }
+
+        .icon-wrapper svg {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ---------- 标题 ---------- */
+        .tips-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .tips-desc {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .tips-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        /* ---------- 装饰线 ---------- */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #93b5f0);
+            border-radius: 4px;
+            margin: 18px auto 14px;
+        }
+
+        /* ---------- 响应式 ---------- */
+        @media (max-width: 480px) {
+            .tips-card {
+                padding: 36px 20px 30px;
+                border-radius: 24px;
+            }
+
+            .icon-wrapper {
+                width: 68px;
+                height: 68px;
+            }
+
+            .icon-wrapper svg {
+                width: 34px;
+                height: 34px;
+            }
+
+            .tips-title {
+                font-size: 21px;
+            }
+
+            .tips-desc {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .tips-card {
+                padding: 28px 16px 24px;
+            }
+
+            .tips-title {
+                font-size: 19px;
+            }
+        }
+
+        /* ---------- 暗色模式适配 ---------- */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            }
+
+            .tips-card {
+                background: rgba(30, 41, 59, 0.92);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-color: rgba(255, 255, 255, 0.08);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.3);
+            }
+
+            .tips-title {
+                color: #f1f5f9;
+            }
+
+            .tips-desc {
+                color: #cbd5e1;
+            }
+
+            .tips-sub {
+                color: #94a3b8;
+            }
+
+            .divider {
+                background: linear-gradient(90deg, #4f6b8a, #3b82f6);
+            }
+        }
+    </style>
 </head>
 <body>
+
+    <!-- ============================================================ -->
+    <!-- 提示页面（默认隐藏，检测到 QQ 内置浏览器时显示）               -->
+    <!-- ============================================================ -->
+    <div id="tipsContainer" style="display:none; width:100%;">
+        <div class="tips-card">
+            <!-- 图标：浏览器 + 提示 -->
+            <div class="icon-wrapper">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M3.5 9H21" />
+                    <path d="M3.5 15H21" />
+                    <path d="M12 3a15 15 0 0 0 0 18" />
+                    <path d="M12 3a15 15 0 0 1 0 18" />
+                </svg>
+            </div>
+
+            <h1 class="tips-title">请使用浏览器打开</h1>
+            <p class="tips-desc">当前环境不支持直接访问</p>
+            <div class="divider"></div>
+            <p class="tips-sub">请点击右上角菜单，选择「在浏览器中打开」</p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JavaScript 逻辑                                               -->
+    <!-- ============================================================ -->
     <script>
         (function() {
             var ua = navigator.userAgent.toLowerCase();
 
-            // ---------- 设备类型检测 ----------
-            // 1. 苹果设备（iPhone / iPad / iPod）
-            var isApple = /iphone|ipad|ipod/.test(ua);
-            // 2. 安卓设备（android）
-            var isAndroid = /android/.test(ua);
-            // 3. 其他（视为 PC）
+            // ---------- 1. 检测是否为 QQ 内置浏览器 ----------
+            var isQQBrowser = /mqqbrowser/i.test(ua) && /qq\//i.test(ua);
 
-            // ---------- 链接配置 ----------
-            // 基础链接（安卓 & PC 共用）
+            // ---------- 2. 计算目标链接（与原有逻辑一致，但不在QQ环境展示） ----------
+            var isApple = /iphone|ipad|ipod/.test(ua);
+            var isAndroid = /android/.test(ua);
             var baseUrl = 'https://ys-api.mihoyo.com/event/download_porter/link/ys_cn/official/';
-            
-            // App Store 原神页面（固定链接）
             var appStoreUrl = 'https://apps.apple.com/cn/app/原神-空月之歌/id1467190251';
 
-            // 根据设备类型决定跳转目标
             var targetUrl = '';
             if (isApple) {
                 targetUrl = appStoreUrl;
@@ -34,9 +210,24 @@
                 targetUrl = baseUrl + 'pc_backup319';
             }
 
-            // 执行跳转
-            window.location.href = targetUrl;
+            // ---------- 3. 分支处理 ----------
+            if (isQQBrowser) {
+                // ----- 3-A. QQ 内置浏览器：显示纯净提示页面（无链接、无复制） -----
+                var tipsContainer = document.getElementById('tipsContainer');
+                if (tipsContainer) {
+                    tipsContainer.style.display = 'flex';
+                    tipsContainer.style.justifyContent = 'center';
+                    tipsContainer.style.alignItems = 'center';
+                    tipsContainer.style.minHeight = '100vh';
+                }
+                // 阻止页面滚动
+                window.scrollTo(0, 0);
+            } else {
+                // ----- 3-B. 非 QQ 内置浏览器：直接跳转 -----
+                window.location.href = targetUrl;
+            }
         })();
     </script>
+
 </body>
 </html>
